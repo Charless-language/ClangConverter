@@ -57,5 +57,16 @@ class TestC2Charless(unittest.TestCase):
         # printf with string only -> 010 (PRINT_STR)
         self.assertTrue("010" in res)
 
+    def test_printf_newline(self):
+        code = 'printf("A\\n");'
+        self.c2.transpile(code)
+        res = self.c2.resolve()
+        # 'A' is 65, '\n' is 10
+        # Should contain ... 65 ... and ... 10 ...
+        # logic: len(65)=2 -> 265
+        #        len(10)=2 -> 210
+        self.assertTrue("265" in res)
+        self.assertTrue("210" in res)
+
 if __name__ == '__main__':
     unittest.main()

@@ -223,8 +223,17 @@ class C2Charless:
                 # No, `ope01.c`: `char len_str[2]`. `len=atoi`. `read len`. `atol`.
                 # If 'A' (65): len=2. `65`.
                 # So "265".
+                import codecs
+                try:
+                    # literal_eval might be safer if we want to handle quotes exactly like python/C?
+                    # But stripping quotes and using unicode_escape is a good approximation for C strings.
+                    # fmt is already stripped of outer quotes.
+                    decoded_fmt = codecs.decode(fmt, 'unicode_escape')
+                except:
+                    decoded_fmt = fmt
+
                 encoded = ""
-                for char in fmt:
+                for char in decoded_fmt:
                     val = str(ord(char))
                     l = len(val)
                     encoded += str(l) + val

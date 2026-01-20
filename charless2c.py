@@ -243,6 +243,7 @@ def parse_and_generate(code, c_code, output_file):
         instr_c = ""
         
         if opcode == 0: # HALT
+            consume_separator()
             instr_c = "return 0;"
         elif opcode == 10: # PRINT_STRING (010 -> 10)
             consume_separator()
@@ -394,9 +395,10 @@ def parse_and_generate(code, c_code, output_file):
 
     # Write instructions
     for addr, code in instructions:
-        c_code.append(code)
+        # Add indentation
+        c_code.append("    " + code)
 
-    c_code.append("    return 0;")
+    # c_code.append("    return 0;") # HALT should handle this, or we trust flow
     c_code.append("}")
 
     # Write to file
