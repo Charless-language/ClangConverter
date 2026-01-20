@@ -62,13 +62,14 @@ class C2Charless:
             ('NUMBER', r'\d+'),
             ('STRING', r'"[^"]*"'),
             ('OP', r'==|!=|<=|>=|[+\-*/%<>=&|!(){};,]'),
+            ('PREPROCESSOR', r'#.*'),
             ('SKIP', r'[ \t\n]+'),
         ]
         tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_spec)
         for mo in re.finditer(tok_regex, code):
             kind = mo.lastgroup
             value = mo.group()
-            if kind == 'SKIP':
+            if kind == 'SKIP' or kind == 'PREPROCESSOR':
                 continue
             self.tokens.append((kind, value))
         self.tokens.append(('EOF', 'EOF'))
@@ -137,8 +138,6 @@ class C2Charless:
             addr = self.get_var_addr(name)
             
             if self.peek()[1] == '=':
-                self.consume('=')
-                self.parse_expression()
                 self.consume('=')
                 self.parse_expression()
                 self.emit_raw(OP_PUSH + SEP + PREFIX_NUM + str(addr) + SEP)
