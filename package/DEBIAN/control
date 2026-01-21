@@ -1,0 +1,8 @@
+Package: charless-converter
+Version: 1.0.0
+Section: devel
+Priority: optional
+Architecture: amd64
+Maintainer: Charless Dev <dev@example.com>
+Description: Charless C to Bytecode Converter
+ Tools to convert C subset to Charless bytecode and back.
